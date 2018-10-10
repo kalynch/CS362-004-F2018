@@ -650,13 +650,15 @@ int getCost(int cardNumber)
 **********************************/
 int smithyEffect(int currentPlayer, struct gameState *state, int handPos){
   //+3 Cards
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 4; i++)
   {
     drawCard(currentPlayer, state);
   }
       
   //discard card from hand
   discardCard(handPos, currentPlayer, state, 0);
+  discardCard(handPos-1, currentPlayer, state, 0);
+
   return 0;
 }
 
@@ -667,7 +669,7 @@ int adventurerEffect(int drawntreasure, struct gameState *state, int currentPlay
     }
     drawCard(currentPlayer, state);
     cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-    if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+    if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold || cardDrawn == province )
       drawntreasure++;
     else{
       temphand[z]=cardDrawn;
@@ -694,7 +696,7 @@ int council_roomEffect(int currentPlayer, struct gameState *state, int handPos){
   state->numBuys++;
       
   //Each other player draws a card
-  for (int i = 0; i < state->numPlayers; i++)
+  for (int i = 1; i <= state->numPlayers; i++)
   {
     if ( i != currentPlayer )
       {
@@ -720,9 +722,10 @@ int outpostEffect(int currentPlayer, struct gameState *state, int handPos){
 
 int sea_hagEffect(int currentPlayer, struct gameState *state){
   for (int i = 0; i < state->numPlayers; i++){
-    if (i != currentPlayer){
-      state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];          state->deckCount[i]--;
-      state->discardCount[i]++;
+    if (i != currentPlayer && i < state-> numPlayers){
+      state->discard[i+1][state->discardCount[i]] = state->deck[i+1][state->deckCount[i]--];          
+      state->deckCount[i+1]--;
+      state->discardCount[i+1]++;
       state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
     }
   }
