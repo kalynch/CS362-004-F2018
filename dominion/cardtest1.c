@@ -29,16 +29,17 @@ int main() {
     initializeGame(numPlayer, k, seed, &G);
 
    printf("----------------- Testing Smithy ----------------\n");
-   printf("----------------- Test 1: Players hand gains 3 cards  ----------------\n");
+   // Gain 3 discard 1
+   printf("----------------- Test 1: Players hand gains 2 cards  ----------------\n");
    memcpy(&testG, &G, sizeof(struct gameState));
    player = whoseTurn(&testG);
-   expected = 3;
+   expected = 2;
    int handCountBeforeTurn = testG.handCount[player];
    temp = cardEffect(smithy, copper, copper, copper, &testG, handpos , 0);
    result = testG.handCount[player] - handCountBeforeTurn;
    if (expected != result)
    {
-	printf("----------------- Test 1: Players hand gains 3 cards - FAILED  ----------------\n");
+	printf("----------------- Test 1: Players hand gains 2 cards - FAILED  ----------------\n");
 	testsFailed++;
    }
 
