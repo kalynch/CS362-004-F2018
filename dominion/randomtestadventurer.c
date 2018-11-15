@@ -42,10 +42,6 @@ int actionCards[] = {//adventurer, COMMENTED OUT FOR THIS TEST. 18 cards remaini
                       sea_hag, 
                       treasure_map};
 
-// int treasureCards[3] = {gold,
-//                         copper,
-//                         silver};
-
 int totalPossibleCards[25] = {adventurer, 
                               council_room, 
                               feast, 
@@ -81,14 +77,6 @@ int main()
   struct gameState G, testG;
   int printStatusFlag = 0;
   srand(time(0));
-
-
-
-  // int victoryCards[3] = {province,
-  //                       duchy,
-  //                       estate};
-
-
 
   // Assigned in test
   int expectedTreasuresDrawn, 
@@ -141,7 +129,7 @@ int main()
     // I've assumed the valid number of cards a player may have in his or her deck 
     // at one time is between 5 and 15 (with the remaining five cards in the player's hand).
     // if the deck was empty, adventurer would shuffle the discards. This is not being tested here.
-    testG.deckCount[player] = generateRandomInRange(10, 20);
+    testG.deckCount[player] = generateRandomInRange(5, 15);
 
     // Populate the player's deck
     // By not placing limits on the frequency with which a given card may be added
