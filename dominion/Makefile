@@ -44,12 +44,18 @@ testBuyCard: testDrawCard.c dominion.o rngs.o
 
 randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
 	gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
+	./randomtestadventurer > randomtestadventurer.out
+	gcov dominion.c >> randomtestadventurer.out
 
 randomtestcard1: randomtestcard1.c dominion.o rngs.o
 	gcc -o randomtestcard1 -g  randomtestcard1.c dominion.o rngs.o $(CFLAGS)
+	./randomtestcard1 > randomtestcard1.out
+	gcov dominion.c >> randomtestcard1.out
 
 randomtestcard2: randomtestcard2.c dominion.o rngs.o
 	gcc -o randomtestcard2 -g  randomtestcard2.c dominion.o rngs.o $(CFLAGS)
+	./randomtestcard2 > randomtestcard2.out
+	gcov dominion.c >> randomtestcard2.out
 
 unittestresults: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
 	./unittest1 > unittestresults.out
