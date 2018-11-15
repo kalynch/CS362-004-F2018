@@ -4,7 +4,7 @@
  * Include the following lines in your makefile:
  *
  * randomtestcard1: randomtestcard1.c dominion.o rngs.o
- *      gcc -o rrandomtestcard1 -g  randomtestcard1.c dominion.o rngs.o $(CFLAGS)
+ *      gcc -o randomtestcard1 -g  randomtestcard1.c dominion.o rngs.o $(CFLAGS)
  * -----------------------------------------------------------------------
  */
 
