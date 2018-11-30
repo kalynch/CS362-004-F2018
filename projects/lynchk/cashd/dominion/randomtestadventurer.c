@@ -73,9 +73,9 @@ int main()
   // Set Up
   int seed = 1000;
   int numTimesTestRun = 0;
-  int maxTimesToRunTest = 100;
+  int maxTimesToRunTest = 1;
   struct gameState G, testG;
-  int printStatusFlag = 0;
+  int printStatusFlag = 1;
   srand(time(0));
 
   // Assigned in test
@@ -83,7 +83,11 @@ int main()
       treasureDrawn,
       player, 
       i,
-      handCountBeforeTurn;
+      handCountBeforeTurn,
+      discardBeforeTurn,
+      minCardsDiscarded,
+      maxCardsDiscarded,
+      actualCardsDiscarded;
 
   /************************************************************************************
   * RANDOM ASSIGNMENTS
@@ -121,6 +125,8 @@ int main()
     // Initialize variables
     expectedTreasuresDrawn = 0;
     treasureDrawn = 0;
+    minCardsDiscarded = 0;
+    maxCardsDiscarded = testG.deckCount[player];
 
     // The game starts with each player having 10 cards in his/her deck.
     // The player then draws five of these cards into his/her hand.
@@ -158,7 +164,10 @@ int main()
       expectedTreasuresDrawn = 2;
 
     // Check how many cards are in the player's hand
-    handCountBeforeTurn = testG.handCount[player]; 
+    handCountBeforeTurn = testG.handCount[player];
+
+    // Check how many cards are in the discard
+      discardBeforeTurn = testG.discardCount[player];
 
     // Play the card
     if(printStatusFlag)
@@ -169,21 +178,44 @@ int main()
     temp = cardEffect(adventurer, copper, copper, copper, &testG, 0 , 0);
 
     treasureDrawn = testG.handCount[player] - handCountBeforeTurn;
+    actualCardsDiscarded = testG.discardCount[player] - discardBeforeTurn;
 
     // Game should prevent and does not
     if (treasureDrawn < 0)
       treasureDrawn = 0;
 
+   // Reset max discard based on treasures drawn
+      maxCardsDiscarded = testG.deckCount[player] - treasureDrawn;
+
     if(printStatusFlag)
       printf("......comparing the results\n");
 
-   if (expectedTreasuresDrawn !=  treasureDrawn)
+   if (expectedTreasuresDrawn !=  treasureDrawn || actualCardsDiscarded < minCardsDiscarded || actualCardsDiscarded > maxCardsDiscarded)
    {
-      printf("\n >>>>> FAILURE: Random Adventurer Tests failed <<<<<\n");
-      printf(" >>>>> Expected Treasures: %d | Drawn Treasures: %d <<<<<\n\n", expectedTreasuresDrawn, treasureDrawn);
+       if( expectedTreasuresDrawn !=  treasureDrawn)
+       {
+           printf("\n >>>>> FAILURE: Random Adventurer Tests failed <<<<<\n");
+           printf(" >>>>> Expected Treasures: %d | Drawn Treasures: %d <<<<<\n\n", expectedTreasuresDrawn, treasureDrawn);
+       }
+
+       if( actualCardsDiscarded < minCardsDiscarded || actualCardsDiscarded > maxCardsDiscarded  )
+       {
+           printf("\n >>>>> FAILURE: Random Adventurer Tests failed <<<<<\n");
+           printf(" >>>>> Permissible to dicard between %d and %d cards | Actually Discarded: %d <<<<<\n\n", minCardsDiscarded, maxCardsDiscarded, actualCardsDiscarded);
+       }
+
       return 0;
    }
-   else numTimesTestRun++;
+   else {
+
+       if (printStatusFlag)
+       {
+           printf ("The number of treasures drawn was: %d", treasureDrawn);
+           printf("The number of cards discarded was: %d", actualCardsDiscarded);
+           printf("The max permissible discards waas: %d", maxCardsDiscarded);
+       }
+       numTimesTestRun++;
+   }
   }
   
   printf("\n >>>>> SUCCESS: Random Adventurer Tests successful <<<<<\n\n");
